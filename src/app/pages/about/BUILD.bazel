@@ -1,0 +1,32 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+
+sass_binary(
+    name = "about_scss",
+    src = "about.scss",
+)
+
+ng_module(
+    name = "about_module_ts",
+    srcs = [
+        "about.module.ts",
+        "about.ts",
+        "about-routing.module.ts",
+    ],
+    assets = [
+        "about.html",
+        ":about_scss",
+    ],
+    deps = [
+        "//src/app/pages/about-popover:about-popover",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/forms",
+        "@npm//@angular/platform-browser",
+        "@npm//@angular/router",
+        "@npm//@ionic/angular",
+        "@npm//@types",
+    ],
+)

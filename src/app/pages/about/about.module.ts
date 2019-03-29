@@ -6,15 +6,17 @@ import { IonicModule } from '@ionic/angular';
 import { AboutPage } from './about';
 import { PopoverPage } from '../about-popover/about-popover';
 import { AboutPageRoutingModule } from './about-routing.module';
+import {AboutPopoverModule} from '../about-popover/about-popover.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AboutPageRoutingModule
+    AboutPageRoutingModule,
+    AboutPopoverModule
   ],
-  declarations: [AboutPage, PopoverPage],
+  declarations: [AboutPage],
   entryComponents: [PopoverPage],
   bootstrap: [AboutPage],
 })

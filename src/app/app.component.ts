@@ -10,7 +10,7 @@ import { UserData } from './providers/user-data';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  styleUrls: ['./app.component.css'],
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit {

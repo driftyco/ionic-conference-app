@@ -1,0 +1,33 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+
+sass_binary(
+    name = "session-detail_scss",
+    src = "session-detail.scss",
+)
+
+ng_module(
+    tsconfig = "//:tsconfig.json",
+    name = "session-detail_module_ts",
+    srcs = [
+        "session-detail.module.ts",
+        "session-detail.ts",
+        "session-detail-routing.module.ts",
+    ],
+    assets = [
+        "session-detail.html",
+        ":session-detail_scss",
+    ],
+    deps = [
+        "//src/app/providers:providers",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/platform-browser",
+        "@npm//@angular/router",
+        "@npm//@ionic/angular",
+        "@npm//@ionic/storage",
+        "@npm//@types",
+    ],
+)

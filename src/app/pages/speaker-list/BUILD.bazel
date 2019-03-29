@@ -1,0 +1,34 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+
+sass_binary(
+    name = "speaker-list_scss",
+    src = "speaker-list.scss",
+)
+
+ng_module(
+    name = "speaker-list_module_ts",
+    srcs = [
+        "speaker-list.module.ts",
+        "speaker-list.ts",
+        "speaker-list-routing.module.ts",
+    ],
+    tsconfig = "//:tsconfig.json",
+    assets = [
+        "speaker-list.html",
+        ":speaker-list_scss",
+    ],
+    deps = [
+        "//src/app/providers:providers",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/platform-browser",
+        "@npm//@angular/router",
+        "@npm//@ionic-native/in-app-browser",
+        "@npm//@ionic/angular",
+        "@npm//@ionic/storage",
+        "@npm//@types",
+    ],
+)

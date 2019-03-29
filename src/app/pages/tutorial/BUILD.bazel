@@ -1,0 +1,31 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+
+sass_binary(
+    name = "tutorial_scss",
+    src = "tutorial.scss",
+)
+
+ng_module(
+    name = "tutorial_module_ts",
+    srcs = [
+        "tutorial.module.ts",
+        "tutorial.ts",
+        "tutorial-routing.module.ts",
+    ],
+    assets = [
+        "tutorial.html",
+        ":tutorial_scss",
+    ],
+    deps = [
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/platform-browser",
+        "@npm//@angular/router",
+        "@npm//@ionic/angular",
+        "@npm//@ionic/storage",
+        "@npm//@types",
+    ],
+)

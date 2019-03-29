@@ -1,15 +1,15 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AlertController, IonList, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Router} from '@angular/router';
+import {AlertController, IonList, LoadingController, ModalController} from '@ionic/angular';
 
-import { ScheduleFilterPage } from '../schedule-filter/schedule-filter';
-import { ConferenceData } from '../../providers/conference-data';
-import { UserData } from '../../providers/user-data';
+import {ScheduleFilterPage} from '../schedule-filter/schedule-filter';
+import {ConferenceData} from '../../providers/conference-data';
+import {UserData} from '../../providers/user-data';
 
 @Component({
   selector: 'page-schedule',
   templateUrl: 'schedule.html',
-  styleUrls: ['./schedule.scss'],
+  styleUrls: ['./schedule.css'],
 })
 export class SchedulePage implements OnInit {
   // Gets a reference to the list element
@@ -29,9 +29,9 @@ export class SchedulePage implements OnInit {
     public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
     public router: Router,
-    public toastCtrl: ToastController,
     public user: UserData
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     // this.app.setTitle('Schedule');
@@ -53,11 +53,11 @@ export class SchedulePage implements OnInit {
   async presentFilter() {
     const modal = await this.modalCtrl.create({
       component: ScheduleFilterPage,
-      componentProps: { excludedTracks: this.excludeTracks }
+      componentProps: {excludedTracks: this.excludeTracks}
     });
     await modal.present();
 
-    const { data } = await modal.onWillDismiss();
+    const {data} = await modal.onWillDismiss();
     if (data) {
       this.excludeTracks = data;
       this.updateSchedule();

@@ -1,0 +1,38 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
+
+ng_module(
+    name = "tabs-page_module_ts",
+    srcs = [
+        "tabs-page.module.ts",
+        "tabs-page.ts",
+        "tabs-page-routing.module.ts",
+    ],
+    assets = ["tabs-page.html", ":tabs-page_scss"],
+    tsconfig = "//:tsconfig.json",
+    deps = [
+        "//src/app/providers:providers",
+        "//src/app/pages/about:about_module_ts",
+        "//src/app/pages/map:map_module_ts",
+        "//src/app/pages/schedule:schedule_module_ts",
+        "//src/app/pages/session-detail:session-detail_module_ts",
+        "//src/app/pages/speaker-detail:speaker-detail_module_ts",
+        "//src/app/pages/speaker-list:speaker-list_module_ts",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/forms",
+        "@npm//@angular/platform-browser",
+        "@npm//@angular/router",
+        "@npm//@ionic/angular",
+        "@npm//@ionic-native/in-app-browser",
+        "@npm//@ionic/storage",
+        "@npm//@types",
+    ],
+)
+
+sass_binary(
+    name = "tabs-page_scss",
+    src = "tabs-page.scss",
+)

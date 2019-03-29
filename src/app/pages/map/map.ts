@@ -5,7 +5,7 @@ import { Platform } from '@ionic/angular';
 @Component({
   selector: 'page-map',
   templateUrl: 'map.html',
-  styleUrls: ['./map.scss']
+  styleUrls: ['./map.css']
 })
 export class MapPage implements AfterViewInit {
   @ViewChild('mapCanvas') mapElement: ElementRef;

@@ -1,0 +1,13 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+
+
+ng_module(
+    name = "env",
+    srcs = glob(["*.ts"]),
+    deps = [
+        "@npm//@angular/core",
+        "@npm//@types",
+    ],
+)

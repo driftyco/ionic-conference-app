@@ -1,0 +1,35 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+
+sass_binary(
+    name = "signup_scss",
+    src = "signup.scss",
+)
+
+ng_module(
+    name = "signup_module_ts",
+    srcs = [
+        "signup.module.ts",
+        "signup.ts",
+        "signup-routing.module.ts",
+    ],
+    tsconfig = "//:tsconfig.json",
+    assets = [
+        "signup.html",
+        ":signup_scss",
+    ],
+    deps = [
+        "//src/app/interfaces:interfaces",
+        "//src/app/providers:providers",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/forms",
+        "@npm//@angular/platform-browser",
+        "@npm//@angular/router",
+        "@npm//@ionic/angular",
+        "@npm//@ionic/storage",
+        "@npm//@types",
+    ],
+)

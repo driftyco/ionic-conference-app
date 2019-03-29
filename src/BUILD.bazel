@@ -1,0 +1,192 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+load("@npm_bazel_typescript//:defs.bzl", "ts_config", "ts_devserver")
+load("@build_bazel_rules_nodejs//:defs.bzl", "history_server", "rollup_bundle")
+
+sass_binary(
+    name = "global_scss",
+    src = "global.scss",
+)
+
+ng_module(
+    name = "src",
+    srcs = glob(
+        include = ["*.ts"],
+        exclude = [
+            "**/*.spec.ts",
+            "main.ts",
+            "test.ts",
+            "initialize_testbed.ts",
+        ],
+    ),
+    tsconfig = "//:tsconfig.json",
+    assets = [
+        "index.html",
+        ":global_scss",
+        "//src/theme:variables_scss"
+        # "//src/app:app_scss", TODO: not enough variable definitions
+    ],
+    deps = [
+        "//src/app:app_module_ts",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/service-worker",
+        "@npm//@angular/forms",
+        "@npm//@angular/animations",
+        "@npm//@angular/platform-browser",
+        "@npm//@angular/router",
+        "@npm//@ionic/angular",
+        "@npm//@types",
+    ],
+)
+
+# We always strip these paths off the front of any assets we serve
+_ROOT_DIRS = [
+    "npm/node_modules/zone.js/dist",
+#    "npm/node_modules/@angular/material/prebuilt-themes",
+#    "npm/node_modules/@ngrx/store/bundles",
+]
+
+filegroup(
+    name = "rxjs_umd_modules",
+    srcs = [
+        ":rxjs_shims.js",
+        "@npm//node_modules/rxjs:bundles/rxjs.umd.js",
+    ],
+)
+
+
+# This devserver is written in Go and is super-fast.
+# It doesn't run any bundler or code splitter. Instead, it concatenates
+# UMD JavaScript code on-the-fly in-memory.
+# This scales really well for massive codebases.
+ts_devserver(
+    name = "devserver",
+    port = 3000,
+    # serve these files rooted at /
+    additional_root_paths = _ROOT_DIRS,
+    # Serve these files but don't inject tags for them into the index file
+    # This might be because we only want to lazy-load these scripts on-demand,
+    # or because they aren't compatible with Require.js so we must use a runtime
+    # loader to load them.
+    data = [
+        "//src/assets/img:image_assets",
+        "//src/assets/data:data_assets",
+# TODO: IS THIS THE RIGHT PATH?
+        "@npm//node_modules/@ionic-native/in-app-browser:ngx/index.js",
+#        "@npm//node_modules/@ngrx/store:bundles/store.umd.min.js",
+    ],
+    # Start from the development version of the main
+    entry_module = "ionic_conference_app/src/main.prod",
+    # <script> and <link> tags will be automatically injected into this index file
+    index_html = "index.html",
+    # These scripts will be included in the JS bundle after require.js
+    # They should have only named UMD modules, or require.js will throw.
+    scripts = [
+        "@npm//node_modules/tslib:tslib.js",
+
+        ":rxjs_umd_modules",
+
+#        ":require.config.js",
+
+        "@npm//node_modules/@angular/animations:bundles/animations.umd.js",
+        "@npm//node_modules/@angular/service-worker:bundles/service-worker.umd.js",
+        "@npm//node_modules/@angular/animations:bundles/animations-browser.umd.js",
+
+#        "@npm//node_modules/@angular/cdk:bundles/cdk-platform.umd.js",
+#        "@npm//node_modules/@angular/cdk:bundles/cdk-collections.umd.js",
+#        "@npm//node_modules/@angular/cdk:bundles/cdk-coercion.umd.js",
+#        "@npm//node_modules/@angular/cdk:bundles/cdk-bidi.umd.js",
+#        "@npm//node_modules/@angular/cdk:bundles/cdk-text-field.umd.js",
+#        "@npm//node_modules/@angular/cdk:bundles/cdk-a11y.umd.js",
+#        "@npm//node_modules/@angular/cdk:bundles/cdk-keycodes.umd.js",
+#        "@npm//node_modules/@angular/cdk:bundles/cdk-observers.umd.js",
+
+        "@npm//node_modules/@angular/common:bundles/common.umd.js",
+        "@npm//node_modules/@angular/common:bundles/common-http.umd.js",
+        "@npm//node_modules/@angular/core:bundles/core.umd.js",
+        "@npm//node_modules/@angular/forms:bundles/forms.umd.js",
+
+#        "@npm//node_modules/@angular/material:bundles/material-button.umd.js",
+#        "@npm//node_modules/@angular/material:bundles/material-card.umd.js",
+#        "@npm//node_modules/@angular/material:bundles/material-core.umd.js",
+#        "@npm//node_modules/@angular/material:bundles/material-divider.umd.js",
+#        "@npm//node_modules/@angular/material:bundles/material-form-field.umd.js",
+#        "@npm//node_modules/@angular/material:bundles/material-list.umd.js",
+#        "@npm//node_modules/@angular/material:bundles/material-toolbar.umd.js",
+#        "@npm//node_modules/@angular/material:bundles/material-icon.umd.js",
+#        "@npm//node_modules/@angular/material:bundles/material-input.umd.js",
+        
+        "@npm//node_modules/@angular/platform-browser:bundles/platform-browser.umd.js",
+        "@npm//node_modules/@angular/platform-browser:bundles/platform-browser-animations.umd.js",
+        "@npm//node_modules/@angular/router:bundles/router.umd.js",
+        "@npm//node_modules/@angular/router:router.ngfactory.js",
+        "@npm//node_modules/@ionic/angular:dist/core.ngfactory.js",
+        "@npm//node_modules/@ionic/storage:bundles/ionic-storage.umd.js",
+
+        #TODO Is this right path? "@npm//node_modules/localforage:dist/localforage.js",
+        # "@npm//node_modules/@ionic-native/in-app-browser:ngx/index.js",
+
+
+#        "@npm//node_modules/@angular/material:button/typings/index.ngfactory.js",
+#        "@npm//node_modules/@angular/material:card/typings/index.ngfactory.js",
+#        "@npm//node_modules/@angular/material:core/typings/index.ngfactory.js",
+#        "@npm//node_modules/@angular/material:form-field/typings/index.ngfactory.js",
+#        "@npm//node_modules/@angular/material:icon/typings/index.ngfactory.js",
+#        "@npm//node_modules/@angular/material:list/typings/index.ngfactory.js",
+#        "@npm//node_modules/@angular/material:toolbar/typings/index.ngfactory.js",
+    ],
+    # Serve these files in addition to the JavaScript bundle
+    # The corresponding <script> or <link> tags will be injected into the index_html
+    static_files = [
+#        "//src/styles:main.css",
+#        "@npm//node_modules/@angular/material:prebuilt-themes/deeppurple-amber.css",
+        #  We load zone.js outside the bundle. That's because it's a "pollyfill"
+        # which speculates that such features might be available in a browser.
+        # Also it's tricky to configure dead code elimination to understand that
+        # zone.js is used, given that we don't have any import statement that
+        # imports from it.
+        "@npm//node_modules/zone.js:dist/zone.min.js",
+    ],
+    # Tell Bazel to build the sources first
+    deps = [
+        ":src",
+    ],
+)
+
+rollup_bundle(
+    name = "bundle",
+    # These Angular routes may be lazy-loaded at runtime.
+    # So we tell Rollup that it can put them in separate JS chunks
+    # (code-splitting) for faster application startup.
+    # In the future, we could automatically gather these from statically
+    # analyzing the Angular sources.
+    additional_entry_points = [
+        "src/app/pages/account/account.module.ngfactory",
+        "src/app/pages/support/support.module.ngfactory",
+        "src/app/pages/tutorial/tutorial.module.ngfactory",
+        "src/app/pages/signup/signup.module.ngfactory",
+        "src/app/pages/tabs-page/tabs-page.module.ngfactory",
+        "src/app/pages/login/login.module.ngfactory",
+
+        "src/app/pages/about/about.module.ngfactory",
+        "src/app/pages/map/map.module.ngfactory",
+        "src/app/pages/schedule/schedule.module.ngfactory",
+        "src/app/pages/session-detail/session-detail.module.ngfactory",
+        "src/app/pages/speaker-detail/speaker-detail.module.ngfactory",
+        "src/app/pages/speaker-list/speaker-list.module.ngfactory",
+    ],
+    entry_point = "src/main.prod",
+    deps = [
+        "//src",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/forms",
+        "@npm//@angular/platform-browser",
+        "@npm//@angular/router",
+        "@npm//@ionic/angular",
+        "@npm//@types",
+    ],
+)

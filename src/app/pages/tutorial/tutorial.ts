@@ -8,7 +8,7 @@ import { Storage } from '@ionic/storage';
 @Component({
   selector: 'page-tutorial',
   templateUrl: 'tutorial.html',
-  styleUrls: ['./tutorial.scss'],
+  styleUrls: ['./tutorial.css'],
 })
 export class TutorialPage {
   showSkip = true;

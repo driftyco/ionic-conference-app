@@ -6,7 +6,7 @@ import { UserData } from '../../providers/user-data';
 
 @Component({
   selector: 'page-session-detail',
-  styleUrls: ['./session-detail.scss'],
+  styleUrls: ['./session-detail.css'],
   templateUrl: 'session-detail.html'
 })
 export class SessionDetailPage {

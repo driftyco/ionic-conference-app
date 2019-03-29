@@ -1,0 +1,18 @@
+# todo: fix it
+package(default_visibility = ["//visibility:public"])
+
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+
+ng_module(
+    name = "about-popover",
+    srcs = glob(["*.ts"]),
+    deps = [
+        "@npm//@angular/core",
+        "@npm//@angular/common",
+        "@npm//@angular/router",
+        "@npm//@ionic/angular",
+        "@npm//@ionic/storage",
+        "@npm//rxjs",
+        "@npm//@types",
+    ],
+)

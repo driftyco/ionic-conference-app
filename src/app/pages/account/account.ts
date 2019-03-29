@@ -9,7 +9,7 @@ import { UserData } from '../../providers/user-data';
 @Component({
   selector: 'page-account',
   templateUrl: 'account.html',
-  styleUrls: ['./account.scss'],
+  styleUrls: ['./account.css'],
 })
 export class AccountPage implements AfterViewInit {
   username: string;

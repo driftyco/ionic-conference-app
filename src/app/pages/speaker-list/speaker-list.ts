@@ -8,7 +8,7 @@ import { ConferenceData } from '../../providers/conference-data';
 @Component({
   selector: 'page-speaker-list',
   templateUrl: 'speaker-list.html',
-  styleUrls: ['./speaker-list.scss'],
+  styleUrls: ['./speaker-list.css'],
 })
 export class SpeakerListPage {
   speakers: any[] = [];

@@ -1,0 +1,40 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary", "sass_library")
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+
+sass_binary(
+    name = "schedule_scss",
+    src = "schedule.scss",
+)
+
+sass_library(
+    name = "schedule_scss_lib",
+    srcs = ["schedule.scss"],
+)
+
+ng_module(
+    name = "schedule_module_ts",
+    srcs = [
+        "schedule.module.ts",
+        "schedule.ts",
+        "schedule-routing.module.ts",
+    ],
+    assets = [
+        "schedule.html",
+        ":schedule_scss"
+    ],
+    tsconfig = "//:tsconfig.json",
+    deps = [
+        "//src/app/pages/schedule-filter",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/forms",
+        "@npm//@angular/platform-browser",
+        "@npm//@angular/router",
+        "@npm//@ionic/angular",
+        "@npm//@ionic/core",
+        "@npm//@ionic/storage",
+        "@npm//@types",
+    ],
+)

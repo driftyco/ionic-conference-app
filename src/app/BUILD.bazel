@@ -1,0 +1,48 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+
+sass_binary(
+    name = "app_scss",
+    src = "app.scss",
+)
+
+sass_binary(
+    name = "app_component_scss",
+    src = "app.component.scss",
+)
+
+ng_module(
+    name = "app_module_ts",
+    srcs = [
+        "app.component.ts",
+        "app.module.ts",
+        "app-routing.module.ts",
+    ],
+    assets = [
+        "app.component.html",
+        ":app_component_scss",
+    ],
+    deps = [
+        "//src/environments:env",
+        "//src/app/providers:providers",
+        "//src/app/pages/account:account_module_ts",
+        "//src/app/pages/login:login_module_ts",
+        "//src/app/pages/signup:signup_module_ts",
+        "//src/app/pages/tabs-page:tabs-page_module_ts",
+        "//src/app/pages/support:support_module_ts",
+        "//src/app/pages/tutorial:tutorial_module_ts",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/platform-browser",
+        "@npm//@angular/router",
+        "@npm//@angular/service-worker",
+        "@npm//@ionic-native/in-app-browser",
+        "@npm//@ionic-native/splash-screen",
+        "@npm//@ionic-native/status-bar",
+        "@npm//@ionic/angular",
+        "@npm//@ionic/storage",
+        "@npm//@types",
+    ],
+)

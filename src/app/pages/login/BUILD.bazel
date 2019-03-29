@@ -1,0 +1,35 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+
+sass_binary(
+    name = "login_scss",
+    src = "login.scss",
+)
+
+ng_module(
+    name = "login_module_ts",
+    srcs = [
+        "login.module.ts",
+        "login.ts",
+        "login-routing.module.ts",
+    ],
+    assets = [
+        "login.html",
+        ":login_scss",
+    ],
+    deps = [
+        "//src/app/interfaces:interfaces",
+        "//src/app/providers:providers",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/forms",
+        "@npm//@angular/platform-browser",
+        "@npm//@angular/router",
+        "@npm//@ionic/core",
+        "@npm//@ionic/storage",
+        "@npm//@ionic/angular",
+        "@npm//@types",
+    ],
+)

@@ -1,0 +1,32 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+
+sass_binary(
+    name = "schedule-filter_scss",
+    src = "schedule-filter.scss",
+    deps = ["//src/app/pages/schedule:schedule_scss_lib"],
+)
+
+ng_module(
+    name = "schedule-filter",
+    srcs = glob(["*.ts"]),
+    tsconfig = "//:tsconfig.json",
+    assets = [
+      "schedule-filter.html",
+      ":schedule-filter_scss"
+    ],
+    deps = [
+        "//src/app/providers:providers",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/forms",
+        "@npm//@angular/platform-browser",
+        "@npm//@angular/router",
+        "@npm//@ionic/angular",
+        "@npm//@ionic/core",
+        "@npm//@ionic/storage",
+        "@npm//@types",
+    ],
+)

@@ -11,7 +11,7 @@ import { UserOptions } from '../../interfaces/user-options';
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
-  styleUrls: ['./login.scss'],
+  styleUrls: ['./login.css'],
 })
 export class LoginPage {
   login: UserOptions = { username: '', password: '' };

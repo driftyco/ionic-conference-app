@@ -1,0 +1,32 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+
+sass_binary(
+    name = "account_scss",
+    src = "account.scss",
+)
+
+ng_module(
+    name = "account_module_ts",
+    srcs = [
+        "account.module.ts",
+        "account.ts",
+        "account-routing.module.ts",
+    ],
+    assets = [
+        "account.html",
+        ":account_scss",
+    ],
+    deps = [
+        "//src/app/providers:providers",
+        "@npm//@angular/common",
+        "@npm//@angular/core",
+        "@npm//@angular/platform-browser",
+        "@npm//@angular/router",
+        "@npm//@ionic/angular",
+        "@npm//@ionic/storage",
+        "@npm//@types",
+    ],
+)
