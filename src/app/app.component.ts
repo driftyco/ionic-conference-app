@@ -78,17 +78,14 @@ export class AppComponent implements OnInit {
     });
   }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-    });
+  async initializeApp() {
+    await this.platform.ready()
+    this.statusBar.styleDefault();
+    this.splashScreen.hide();
   }
 
-  checkLoginStatus() {
-    return this.userData.isLoggedIn().then(loggedIn => {
-      return this.updateLoggedInStatus(loggedIn);
-    });
+  async checkLoginStatus() {
+    await this.updateLoggedInStatus(await this.userData.isLoggedIn());
   }
 
   updateLoggedInStatus(loggedIn: boolean) {
@@ -111,10 +108,9 @@ export class AppComponent implements OnInit {
     });
   }
 
-  logout() {
-    this.userData.logout().then(() => {
-      return this.router.navigateByUrl('/app/tabs/schedule');
-    });
+  async logout() {
+    await this.userData.logout();
+    await this.router.navigateByUrl('/app/tabs/schedule');
   }
 
   openTutorial() {

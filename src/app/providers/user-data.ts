@@ -29,47 +29,37 @@ export class UserData {
     }
   }
 
-  login(username: string): Promise<any> {
-    return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
-      this.setUsername(username);
-      return window.dispatchEvent(new CustomEvent('user:login'));
-    });
+  async login(username: string): Promise<any> {
+    await this.storage.set(this.HAS_LOGGED_IN, true);
+    this.setUsername(username);
+    await window.dispatchEvent(new CustomEvent('user:login'));
   }
 
-  signup(username: string): Promise<any> {
-    return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
-      this.setUsername(username);
-      return window.dispatchEvent(new CustomEvent('user:signup'));
-    });
+  async signup(username: string): Promise<any> {
+    await this.storage.set(this.HAS_LOGGED_IN, true);
+    this.setUsername(username);
+    await window.dispatchEvent(new CustomEvent('user:signup'));
   }
 
-  logout(): Promise<any> {
-    return this.storage.remove(this.HAS_LOGGED_IN).then(() => {
-      return this.storage.remove('username');
-    }).then(() => {
-      window.dispatchEvent(new CustomEvent('user:logout'));
-    });
+  async logout(): Promise<any> {
+    await this.storage.remove(this.HAS_LOGGED_IN);
+    await this.storage.remove('username');
+    await window.dispatchEvent(new CustomEvent('user:logout'));
   }
 
-  setUsername(username: string): Promise<any> {
-    return this.storage.set('username', username);
+  async setUsername(username: string): Promise<any> {
+    await this.storage.set('username', username);
   }
 
-  getUsername(): Promise<string> {
-    return this.storage.get('username').then((value) => {
-      return value;
-    });
+  async getUsername(): Promise<string> {
+    return await this.storage.get('username');
   }
 
-  isLoggedIn(): Promise<boolean> {
-    return this.storage.get(this.HAS_LOGGED_IN).then((value) => {
-      return value === true;
-    });
+  async isLoggedIn(): Promise<boolean> {
+    return await this.storage.get(this.HAS_LOGGED_IN);
   }
 
-  checkHasSeenTutorial(): Promise<string> {
-    return this.storage.get(this.HAS_SEEN_TUTORIAL).then((value) => {
-      return value;
-    });
+  async checkHasSeenTutorial(): Promise<string> {
+    return await this.storage.get(this.HAS_SEEN_TUTORIAL);
   }
 }
