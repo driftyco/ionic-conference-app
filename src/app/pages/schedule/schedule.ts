@@ -1,6 +1,5 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AlertController, IonList, LoadingController, ModalController, ToastController, Config } from '@ionic/angular';
+import { AlertController, IonList, LoadingController, ModalController, Config, IonRouterOutlet} from '@ionic/angular';
 
 import { ScheduleFilterPage } from '../schedule-filter/schedule-filter';
 import { ConferenceData } from '../../providers/conference-data';
@@ -23,21 +22,19 @@ export class SchedulePage implements OnInit {
   shownSessions: any = [];
   groups: any = [];
   confDate: string;
-
   constructor(
-    public alertCtrl: AlertController,
-    public confData: ConferenceData,
-    public loadingCtrl: LoadingController,
-    public modalCtrl: ModalController,
-    public router: Router,
-    public toastCtrl: ToastController,
-    public user: UserData,
-    public config: Config
-  ) { }
+    private alertCtrl: AlertController,
+    private confData: ConferenceData,
+    private loadingCtrl: LoadingController,
+    private modalCtrl: ModalController,
+    private user: UserData,
+    private config: Config,
+    private routerOutlet: IonRouterOutlet
+  ) {
+  }
 
   ngOnInit() {
     this.updateSchedule();
-
     this.ios = this.config.get('mode') === 'ios';
   }
 
@@ -56,7 +53,9 @@ export class SchedulePage implements OnInit {
   async presentFilter() {
     const modal = await this.modalCtrl.create({
       component: ScheduleFilterPage,
-      componentProps: { excludedTracks: this.excludeTracks }
+      componentProps: { excludedTracks: this.excludeTracks },
+      swipeToClose: true,
+      presentingElement: this.routerOutlet.nativeEl
     });
     await modal.present();
 

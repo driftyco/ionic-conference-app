@@ -6,7 +6,7 @@ import { MenuController, Platform, ToastController } from '@ionic/angular';
 
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-
+import { DarkModeService } from './providers/dark-mode.service'
 import { Storage } from '@ionic/storage';
 
 import { UserData } from './providers/user-data';
@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
     {
       title: 'Speakers',
       url: '/app/tabs/speakers',
-      icon: 'contacts'
+      icon: 'people'
     },
     {
       title: 'Map',
@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
     }
   ];
   loggedIn = false;
-  dark = false;
+  dark:any;
 
   constructor(
     private menu: MenuController,
@@ -53,22 +53,27 @@ export class AppComponent implements OnInit {
     private userData: UserData,
     private swUpdate: SwUpdate,
     private toastCtrl: ToastController,
+    public darkMode: DarkModeService
   ) {
     this.initializeApp();
+    this.darkMode.shouldDark.subscribe(res => this.dark = res);
   }
 
   async ngOnInit() {
     this.checkLoginStatus();
     this.listenForLoginEvents();
 
-    this.swUpdate.available.subscribe(async res => {
+    this.swUpdate.available.subscribe(async () => {
       const toast = await this.toastCtrl.create({
         message: 'Update available!',
-        showCloseButton: true,
         position: 'bottom',
-        closeButtonText: `Reload`
+        buttons: [
+          {
+            text: 'Reload',
+            role: 'cancel'
+          }
+        ]
       });
-
       await toast.present();
 
       toast
@@ -85,10 +90,9 @@ export class AppComponent implements OnInit {
     });
   }
 
-  checkLoginStatus() {
-    return this.userData.isLoggedIn().then(loggedIn => {
-      return this.updateLoggedInStatus(loggedIn);
-    });
+  async checkLoginStatus() {
+    const loggedIn = await this.userData.isLoggedIn();
+    return this.updateLoggedInStatus(loggedIn);
   }
 
   updateLoggedInStatus(loggedIn: boolean) {

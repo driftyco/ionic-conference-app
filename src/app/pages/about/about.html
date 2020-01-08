@@ -1,21 +1,28 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="light">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>About</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="presentPopover($event)">
-        <ion-icon slot="icon-only" name="more"></ion-icon>
+        <ion-icon slot="icon-only" ios="ellipsis-horizontal-sharp" md="ellipsis-vertical-sharp"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-header collapse="condense" class="ion-no-border">
+  <ion-toolbar>
+    <ion-title size="large">About</ion-title>
+  </ion-toolbar>
+</ion-header>
+
   <div class="about-header">
     <img src="assets/img/ionic-logo-white.svg" alt="ionic logo">
   </div>
+
   <div class="about-info">
     <h4 class="ion-padding-start">Ionic Conference</h4>
 
@@ -39,10 +46,7 @@
     </ion-list>
 
     <p class="ion-padding-start ion-padding-end">
-      The Ionic Conference is a one-day conference featuring talks from the Ionic team. It is focused on Ionic applications being
-      built with Ionic Framework. This includes migrating apps to the latest Ionic Framework, Angular concepts, Webpack, Sass, and many
-      other technologies used in Ionic Framework. Tickets are completely sold out, and we’re expecting more than 1000 developers
-      – making this the largest Ionic conference ever!
+      The Ionic Conference is a one-day conference featuring talks from the Ionic team. It is focused on Ionic applications being built with Ionic Framework. This includes migrating apps to the latest Ionic Framework, Angular concepts, Webpack, Sass, and many other technologies used in Ionic Framework. Tickets are completely sold out, and we’re expecting more than 1000 developers – making this the largest Ionic conference ever!
     </p>
   </div>
 </ion-content>

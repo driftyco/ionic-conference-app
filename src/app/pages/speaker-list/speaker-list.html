@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="light">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -8,6 +8,13 @@
 </ion-header>
 
 <ion-content>
+
+  <ion-header collapse="condense" class="ion-no-border">
+  <ion-toolbar>
+    <ion-title size="large">Speakers</ion-title>
+  </ion-toolbar>
+</ion-header>
+
   <ion-grid fixed>
     <ion-row class="ion-align-items-stretch">
       <ion-col size="12" size-md="6" *ngFor="let speaker of speakers">
@@ -42,13 +49,13 @@
             </ion-col>
             <ion-col size="4" class="ion-text-center">
               <ion-button fill="clear" size="small" color="primary" (click)="openSpeakerShare(speaker)">
-                <ion-icon name="share-alt" slot="start"></ion-icon>
+                <ion-icon name="share-sharp" slot="start"></ion-icon>
                 Share
               </ion-button>
             </ion-col>
             <ion-col size="4" class="ion-text-right">
               <ion-button fill="clear" size="small" color="primary" (click)="openContact(speaker)">
-                <ion-icon name="chatboxes" slot="start"></ion-icon>
+                <ion-icon name="chatbubbles" slot="start"></ion-icon>
                 Contact
               </ion-button>
             </ion-col>

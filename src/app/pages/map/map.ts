@@ -1,83 +1,61 @@
-import { Component, ElementRef, Inject, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { ConferenceData } from '../../providers/conference-data';
-import { Platform } from '@ionic/angular';
-import { DOCUMENT} from '@angular/common';
-
+import { DarkModeService } from '../../providers/dark-mode.service';
 import { darkStyle } from './map-dark-style';
+import { from, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'page-map',
   templateUrl: 'map.html',
   styleUrls: ['./map.scss']
 })
-export class MapPage implements AfterViewInit {
+export class MapPage implements AfterViewInit, OnDestroy {
   @ViewChild('mapCanvas', { static: true }) mapElement: ElementRef;
-
+  mapMgmt$: any;
   constructor(
-    @Inject(DOCUMENT) private doc: Document,
+    public darkMode: DarkModeService,
     public confData: ConferenceData,
-    public platform: Platform) {}
+  ) {}
 
-  async ngAfterViewInit() {
-    const appEl = this.doc.querySelector('ion-app');
-    let isDark = false;
-    let style = [];
-    if (appEl.classList.contains('dark-theme')) {
-      style = darkStyle;
-    }
-
-    const googleMaps = await getGoogleMaps(
-      'AIzaSyB8pf6ZdFQj5qw7rc_HSGrhUwQKfIe9ICw'
-    );
-
-    let map;
-
-    this.confData.getMap().subscribe((mapData: any) => {
+  ngAfterViewInit() {
+    let map: any;
+    this.mapMgmt$ = combineLatest(
+      from(getGoogleMaps('AIzaSyB8pf6ZdFQj5qw7rc_HSGrhUwQKfIe9ICw')),
+      this.confData.getMap(),
+      this.darkMode.shouldDark
+    )
+    .subscribe(([googleMaps, mapData, shouldDark]: [any, any, boolean]) => {
+      if (!map) {
       const mapEle = this.mapElement.nativeElement;
-
-      map = new googleMaps.Map(mapEle, {
-        center: mapData.find((d: any) => d.center),
-        zoom: 16,
-        styles: style
-      });
-
-      mapData.forEach((markerData: any) => {
-        const infoWindow = new googleMaps.InfoWindow({
-          content: `<h5>${markerData.name}</h5>`
+        map = new googleMaps.Map(mapEle, {
+          center: mapData.find((d: any) => d.center),
+          zoom: 16
         });
+        mapData.forEach((markerData: any) => {
+          const infoWindow = new googleMaps.InfoWindow({
+            content: `<h5>${markerData.name}</h5>`
+          });
 
-        const marker = new googleMaps.Marker({
-          position: markerData,
-          map,
-          title: markerData.name
+          const marker = new googleMaps.Marker({
+            position: markerData,
+            map,
+            title: markerData.name
+          });
+
+          marker.addListener('click', () => {
+            infoWindow.open(map, marker);
+          });
         });
-
-        marker.addListener('click', () => {
-          infoWindow.open(map, marker);
+        googleMaps.event.addListenerOnce(map, 'idle', () => {
+          mapEle.classList.add('show-map');
         });
-      });
-
-      googleMaps.event.addListenerOnce(map, 'idle', () => {
-        mapEle.classList.add('show-map');
-      });
+      }
+      let styles = shouldDark ? darkStyle : [];
+      map.setOptions({ styles });
     });
-
-    const observer = new MutationObserver(function (mutations) {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'class') {
-          const el = mutation.target as HTMLElement;
-          isDark = el.classList.contains('dark-theme');
-          if (map && isDark) {
-            map.setOptions({styles: darkStyle});
-          } else if (map) {
-            map.setOptions({styles: []});
-          }
-        }
-      });
-    });
-    observer.observe(appEl, {
-      attributes: true
-    });
+  }
+  ngOnDestroy(){
+    this.mapMgmt$.unsubscribe()
   }
 }
 
@@ -104,4 +82,3 @@ function getGoogleMaps(apiKey: string): Promise<any> {
     };
   });
 }
-
