@@ -4,6 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Map</ion-title>
+    <p [hidden]="lat == null && lng == null" slot="end">Latitude: {{lat}}   ,   Longitude: {{lng}}</p>
   </ion-toolbar>
 </ion-header>
 

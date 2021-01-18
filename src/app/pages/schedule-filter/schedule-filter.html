@@ -2,7 +2,8 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button *ngIf="ios" (click)="dismiss()">Cancel</ion-button>
-      <ion-button *ngIf="!ios" (click)="selectAll(false)">Reset</ion-button>
+      <ion-button *ngIf="!ios && isReset" (click)="selectAll(false)">Reset</ion-button>
+      <ion-button *ngIf="!ios && !isReset" (click)="selectAll(true)">Select All</ion-button>
     </ion-buttons>
 
     <ion-title>

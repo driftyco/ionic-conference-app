@@ -11,6 +11,7 @@ import { ConferenceData } from '../../providers/conference-data';
 })
 export class ScheduleFilterPage {
   ios: boolean;
+  isReset = true;
 
   tracks: {name: string, icon: string, isChecked: boolean}[] = [];
 
@@ -43,6 +44,7 @@ export class ScheduleFilterPage {
     this.tracks.forEach(track => {
       track.isChecked = check;
     });
+    this.isReset = check;
   }
 
   applyFilters() {

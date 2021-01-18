@@ -13,10 +13,16 @@ import { darkStyle } from './map-dark-style';
 export class MapPage implements AfterViewInit {
   @ViewChild('mapCanvas', { static: true }) mapElement: ElementRef;
 
+  lat: number;
+  lng: number;
+
   constructor(
     @Inject(DOCUMENT) private doc: Document,
     public confData: ConferenceData,
-    public platform: Platform) {}
+    public platform: Platform) {
+      this.lat = null;
+      this.lng = null;
+    }
 
   async ngAfterViewInit() {
     const appEl = this.doc.querySelector('ion-app');
@@ -41,6 +47,11 @@ export class MapPage implements AfterViewInit {
         styles: style
       });
 
+      map.addListener('click',(e) => {
+        this.lat = e.latLng.lat();
+        this.lng = e.latLng.lng();
+      });
+
       mapData.forEach((markerData: any) => {
         const infoWindow = new googleMaps.InfoWindow({
           content: `<h5>${markerData.name}</h5>`
@@ -52,8 +63,12 @@ export class MapPage implements AfterViewInit {
           title: markerData.name
         });
 
-        marker.addListener('click', () => {
+        marker.addListener('click', (e) => {
           infoWindow.open(map, marker);
+          map.setZoom(16);
+          map.setCenter(e.latLng);
+          this.lat = e.latLng.lat();
+          this.lng = e.latLng.lng();
         });
       });
 
