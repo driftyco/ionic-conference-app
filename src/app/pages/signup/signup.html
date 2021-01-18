@@ -16,7 +16,10 @@
   <form #signupForm="ngForm" novalidate>
     <ion-list lines="none">
       <ion-item>
-        <ion-label position="stacked" color="primary">Username</ion-label>
+        <ion-label position="stacked" color="primary">
+          <ion-icon name="person"></ion-icon>
+          Username
+        </ion-label>
         <ion-input [(ngModel)]="signup.username" name="username" type="text" #username="ngModel" required>
         </ion-input>
       </ion-item>
@@ -27,7 +30,10 @@
       </ion-text>
 
       <ion-item>
-        <ion-label position="stacked" color="primary">Password</ion-label>
+        <ion-label position="stacked" color="primary">
+          <ion-icon name="key"></ion-icon>
+          Password
+        </ion-label>
         <ion-input [(ngModel)]="signup.password" name="password" type="password" #password="ngModel" required>
         </ion-input>
       </ion-item>
@@ -42,5 +48,9 @@
       <ion-button (click)="onSignup(signupForm)" type="submit" expand="block">Create</ion-button>
     </div>
   </form>
+
+  <p class="go-to-login">
+    Already have an account? <a (click)="goToLogin()">Login.</a>
+  </p>
 
 </ion-content>

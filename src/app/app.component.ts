@@ -87,6 +87,12 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+
+    this.platform.backButton.subscribeWithPriority(0, () => {
+      if (!document.querySelector('.ion-page.can-go-back:not(.ion-page-hidden)')) {
+        (navigator as any).app.exitApp();
+      }
+    });
   }
 
   checkLoginStatus() {

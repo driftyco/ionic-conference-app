@@ -30,4 +30,8 @@ export class SignupPage {
       this.router.navigateByUrl('/app/tabs/schedule');
     }
   }
+
+  goToLogin(){
+    this.router.navigateByUrl('/login');
+  }
 }
