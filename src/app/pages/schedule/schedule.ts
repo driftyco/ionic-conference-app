@@ -71,6 +71,19 @@ export class SchedulePage implements OnInit {
     }
   }
 
+  // pull to refresh function
+  doRefresh(event) {
+    // We can reload content by calling any APIs
+    console.log('Begin async operation');
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      event.target.complete();
+    }, 2000);
+  }
+
+
+
   async addFavorite(slidingItem: HTMLIonItemSlidingElement, sessionData: any) {
     if (this.user.hasFavorite(sessionData.name)) {
       // Prompt to remove favorite
