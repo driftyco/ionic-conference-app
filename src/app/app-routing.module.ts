@@ -32,7 +32,8 @@ const routes: Routes = [
     path: 'tutorial',
     loadChildren: () => import('./pages/tutorial/tutorial.module').then(m => m.TutorialModule),
     canLoad: [CheckTutorial]
-  }
+  },  { path: 'order-form', loadChildren: './order-form/order-form.module#OrderFormPageModule' }
+
 ];
 
 @NgModule({

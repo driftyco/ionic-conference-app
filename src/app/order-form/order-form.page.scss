@@ -1,0 +1,21 @@
+.img {
+  max-width: 5rem;
+  max-height: 5em;
+}
+
+.order-form-header {
+  display: grid;
+  grid-template-areas: 1fr 1fr / 50px;
+
+  .order-form-header__left {
+    grid-area: 1 / 1 / 1 / span 1;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .order-form-header__right {
+    grid-area: 1 / 2 / 1 / -1;
+    display: flex;
+    justify-content: space-around;
+  }
+}
